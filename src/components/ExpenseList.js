@@ -7,15 +7,22 @@ const ExpenseList = (props) => {
     return (
         <div>
             <h1>Expense List</h1>
-            {props.expenses.map((expense) => {
-                return <ExpenseListItem 
-                            key={expense.id} 
-                            description={expense.description}
-                            amount={expense.amount}
-                            createdAt={expense.createdAt} 
-                            id={expense.id}               
-                        />
-            })}
+            {   props.expenses.length === 0 ? 
+                <div>
+                    <span>No expenses</span>
+                </div> :
+                
+                props.expenses.map((expense) => {
+                    return <ExpenseListItem
+                        key={expense.id}
+                        description={expense.description}
+                        amount={expense.amount}
+                        createdAt={expense.createdAt}
+                        id={expense.id}
+                    />
+                })
+                
+            }
         </div>
     );
 };
