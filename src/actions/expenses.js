@@ -9,8 +9,8 @@ export const addExpense = (expense) => {
 }
 
 export const startAddExpense = (description = '', amount, note = '', createdAt = 0) => {
-    return (dispatch) => {
-        return firebase.database().ref('expenses').push({ description, amount, note, createdAt }).then((ref) => {
+    return (dispatch, getState) => {
+        return firebase.database().ref(`users/${getState().auth.uid}/expenses`).push({ description, amount, note, createdAt }).then((ref) => {
             dispatch(addExpense({ id: ref.key, description, amount, note, createdAt }))
         })
     }
@@ -25,8 +25,8 @@ export const removeExpense = (id) => {
 }
 
 export const startRemoveExpense = (id) => {
-    return (dispatch) => {
-       return firebase.database().ref(`expenses/${id}`).remove().then(() => {
+    return (dispatch, getState) => {
+       return firebase.database().ref(`users/${getState().auth.uid}/expenses/${id}`).remove().then(() => {
             dispatch(removeExpense(id))
         })
     }
@@ -42,8 +42,8 @@ export const editExpense = (id, updates) => {
 }
 
 export const startEditExpense = (id, updates) => {
-    return (dispatch) => {
-        return firebase.database().ref(`expenses/${id}`).update({
+    return (dispatch, getState) => {
+        return firebase.database().ref(`users/${getState().auth.uid}/expenses/${id}`).update({
             ...updates
         }).then(() => {
             dispatch(editExpense(id, updates))
@@ -60,8 +60,8 @@ export const setExpenses = (expenses) => {
 }
 
 export const startSetExpenses = () => {
-    return (dispatch) => {
-        return firebase.database().ref('expenses').once('value').then((snapshot) => {
+    return (dispatch, getState) => {
+        return firebase.database().ref(`users/${getState().auth.uid}/expenses`).once('value').then((snapshot) => {
             const expenses = []
             snapshot.forEach((childSnapshot) => {
                 expenses.push({
